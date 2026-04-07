@@ -1,0 +1,27 @@
+{
+  "name": "waba",
+  "version": "1.0.0",
+  "description": "Webhook API para WhatsApp Cloud API com Express",
+  "main": "src/server.js",
+  "scripts": {
+    "build": "node -e \"console.log('Build concluido: projeto sem etapa de compilacao.')\"",
+    "dev": "node --watch src/server.js",
+    "start": "node src/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/swiftsoft-cto/waba.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/swiftsoft-cto/waba/issues"
+  },
+  "homepage": "https://github.com/swiftsoft-cto/waba#readme",
+  "dependencies": {
+    "dotenv": "^17.4.1",
+    "express": "^5.2.1"
+  }
+}
