@@ -1,6 +1,6 @@
 {
   "name": "waba",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Webhook API para WhatsApp Cloud API com Express",
   "main": "src/server.js",
   "scripts": {
