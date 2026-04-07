@@ -10,56 +10,56 @@ permissions:
 
 jobs:
   bump-version:
-    if: github.actor != 'github-actions[bot]'
+    if: ${{ github.actor != 'github-actions[bot]' }}
     runs-on: ubuntu-latest
     env:
       APP_DIR: /var/www/waba.swiftsoft.com.br
 
     steps:
       - name: Checkout repository
-      uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
-        persist-credentials: false
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
 
       - name: Start SSH agent
-      uses: webfactory/ssh-agent@v0.9.0
-      with:
-        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
       - name: Add GitHub to known_hosts
-      run: |
-        mkdir -p ~/.ssh
-        ssh-keyscan github.com >> ~/.ssh/known_hosts
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
 
       - name: Configure SSH remote
-      run: git remote set-url origin git@github.com:${{ github.repository }}.git
+        run: git remote set-url origin git@github.com:${{ github.repository }}.git
 
       - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
 
       - name: Configure Git user
-      run: |
-        git config user.name "github-actions[bot]"
-        git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
       - name: Bump patch version and create tag
-      run: npm version patch -m "chore(release): %s [skip ci]"
+        run: npm version patch -m "chore(release): %s [skip ci]"
 
       - name: Push commit and tags
-      run: git push --follow-tags
+        run: git push --follow-tags
 
       - name: Deploy on server
-      uses: appleboy/ssh-action@v1.0.3
-      with:
-        host: ${{ secrets.SSH_HOST }}
-        username: ${{ secrets.SSH_USER }}
-        key: ${{ secrets.SSH_PRIVATE_KEY }}
-        port: 22
-        script: |
-          cd ${{ env.APP_DIR }}
-          git pull origin main
-          npm ci --omit=dev
-          pm2 restart waba || pm2 start src/server.js --name waba
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          script: |
+            cd ${{ env.APP_DIR }}
+            git pull origin main
+            npm ci --omit=dev
+            pm2 restart waba || pm2 start src/server.js --name waba
